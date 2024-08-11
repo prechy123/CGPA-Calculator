@@ -82,7 +82,7 @@ export default function GradeInput({ navigation, route }) {
       return total;
     }
     total = myPoints() / totalPoints();
-    return total;
+    return total.toFixed(2);
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -155,8 +155,8 @@ export default function GradeInput({ navigation, route }) {
         />
       </View>
       <View style={styles.grade}>
-        <Text style={styles.gradeText}>Total Units: {totalUnits()}</Text>
-        <Text style={styles.gradeText}>Grade: {gradePoint()}</Text>
+        {/* <Text style={styles.gradeText}>Total Units: {totalUnits()}</Text> */}
+        <Text style={styles.gradeText}>Semester GP: {gradePoint()}</Text>
       </View>
     </SafeAreaView>
   );
