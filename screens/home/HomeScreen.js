@@ -1,6 +1,7 @@
 import { Button, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function HomeScreen({ navigation }) {
+  
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.text}>What is your College CGPA Scale</Text>

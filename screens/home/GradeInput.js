@@ -13,6 +13,7 @@ import { DataTable } from "react-native-paper";
 import { useState } from "react";
 import SavedField from "../../components/SavedScore";
 import { v4 } from "uuid";
+import { clearGrades, getGrades, storeGrades } from "../../utils/storage";
 
 export default function GradeInput({ navigation, route }) {
   console.log(route.params?.scale);
@@ -84,6 +85,13 @@ export default function GradeInput({ navigation, route }) {
     total = myPoints() / totalPoints();
     return total.toFixed(2);
   }
+  async function handleSaveSemesterGrade() {
+    await storeGrades(scores)
+    const data = await getGrades()
+    console.log(data)
+    // navigation.navigate("Save Grade");
+    // await clearGrades()
+  }
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Grade Input Screen</Text>
@@ -150,7 +158,7 @@ export default function GradeInput({ navigation, route }) {
       <View style={{ width: "100%", marginTop: 30 }}>
         <Button
           title="Save Semester grade"
-          onPress={() => navigation.navigate("Save Grade")}
+          onPress={handleSaveSemesterGrade}
           color="#0B6623"
         />
       </View>
