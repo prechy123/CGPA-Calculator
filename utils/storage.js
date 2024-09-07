@@ -30,17 +30,15 @@ export const storeGrades = async (value) => {
       const jsonGrade = JSON.stringify([{ "1001st": value }]);
       await AsyncStorage.setItem("Grades", jsonGrade);
     } else {
-      // fix issue later
-      // for (level in levels) {
-      //   console.log(level)
-      //   const keys = Object.keys(grade);
-      //   console.log("keys:",keys)
-      //   if (keys.includes(level)) {
-      //     grade.push({ [levels[grade.length]]: value });
-      //     await AsyncStorage.setItem("Grades", JSON.stringify(grade));
-      //     return;
-      //   }
-      // }
+      for (level of levels) {
+        console.log(level);
+        const prevLevel = Object.keys(grade[grade.length - 1])[0];
+        if (level === prevLevel) {
+          grade.push({ [levels[grade.length]]: value });
+          await AsyncStorage.setItem("Grades", JSON.stringify(grade));
+          return;
+        }
+      }
     }
 
     console.log("Stored successfully");

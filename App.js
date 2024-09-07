@@ -7,7 +7,7 @@ import DatabaseScreen from "./screens/DatabaseScreen";
 import AboutScreen from "./screens/AboutScreen";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SaveGrade from "./screens/home/SaveGrade";
+// import SaveGrade from "./screens/home/SaveGrade";
 import GradeInput from "./screens/home/GradeInput";
 
 const Tab = createBottomTabNavigator();
@@ -29,7 +29,7 @@ function HomeStack() {
     >
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Input Scores" component={GradeInput} />
-      <Stack.Screen name="Save Grade" component={SaveGrade} />
+      {/* <Stack.Screen name="Save Grade" component={SaveGrade} /> */}
     </Stack.Navigator>
   );
 }

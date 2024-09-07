@@ -14,6 +14,7 @@ import { useState } from "react";
 import SavedField from "../../components/SavedScore";
 import { v4 } from "uuid";
 import { clearGrades, getGrades, storeGrades } from "../../utils/storage";
+import gradePoint from "../../utils/gradeCalculator";
 
 export default function GradeInput({ navigation, route }) {
   console.log(route.params?.scale);
@@ -35,62 +36,11 @@ export default function GradeInput({ navigation, route }) {
       alert("Ensure all cells are filled.");
     }
   }
-  function totalUnits() {
-    let total = 0;
-    for (let score of scores) {
-      total += parseInt(score.unit);
-    }
-    return total;
-  }
-  function myPoints() {
-    let total = 0;
-    const grade = ["A", "B", "C", "D", "E", "F"];
-    const gradeScore = {
-      A: 5,
-      B: 4,
-      C: 3,
-      D: 2,
-      E: 1,
-      F: 0,
-    };
-    for (let score of scores) {
-      const gradeCapital = score.grade.toUpperCase();
-      if (grade.includes(gradeCapital)) {
-        total += gradeScore[gradeCapital] * parseInt(score.unit);
-      }
-    }
-    return total;
-  }
-  function totalPoints() {
-    let total = 0;
-    const grade = ["A", "B", "C", "D", "E", "F"];
-    const gradeScore = {
-      A: 5,
-      B: 4,
-      C: 3,
-      D: 2,
-      E: 1,
-      F: 0,
-    };
-    for (let score of scores) {
-      total += parseInt(score.unit);
-    }
-    return total;
-  }
-  function gradePoint() {
-    let total = 0;
-    if (totalPoints() === 0) {
-      return total;
-    }
-    total = myPoints() / totalPoints();
-    return total.toFixed(2);
-  }
+
   async function handleSaveSemesterGrade() {
     await storeGrades(scores)
-    const data = await getGrades()
-    console.log(data)
-    // navigation.navigate("Save Grade");
-    // await clearGrades()
+    setScores([])
+    navigation.navigate("Database");
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -164,7 +114,7 @@ export default function GradeInput({ navigation, route }) {
       </View>
       <View style={styles.grade}>
         {/* <Text style={styles.gradeText}>Total Units: {totalUnits()}</Text> */}
-        <Text style={styles.gradeText}>Semester GP: {gradePoint()}</Text>
+        <Text style={styles.gradeText}>Semester GP: {gradePoint(scores)}</Text>
       </View>
     </SafeAreaView>
   );

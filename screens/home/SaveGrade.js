@@ -1,9 +1,10 @@
 import { Button, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import SemesterMetrics from '../../components/SemesterMetrics'
 
 export default function SaveGrade({navigation}) {
   return (
     <SafeAreaView style={styles.container}>
-        <Text>Save Grade Screen</Text>
+        <SemesterMetrics />
         <Button title="Next" onPress={() => navigation.jumpTo("Database")} />
     </SafeAreaView>
   )
