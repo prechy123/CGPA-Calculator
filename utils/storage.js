@@ -22,20 +22,22 @@ const levels = [
   "LEGEND🐐🐐",
 ];
 
+const KEY = "Grades"
+
 export const storeGrades = async (value) => {
   try {
-    const retrievedGrade = await AsyncStorage.getItem("Grades");
+    const retrievedGrade = await AsyncStorage.getItem(KEY);
     const grade = retrievedGrade != null ? JSON.parse(retrievedGrade) : null;
     if (grade === null) {
       const jsonGrade = JSON.stringify([{ "1001st": value }]);
-      await AsyncStorage.setItem("Grades", jsonGrade);
+      await AsyncStorage.setItem(KEY, jsonGrade);
     } else {
       for (level of levels) {
-        console.log(level);
         const prevLevel = Object.keys(grade[grade.length - 1])[0];
         if (level === prevLevel) {
-          grade.push({ [levels[grade.length]]: value });
-          await AsyncStorage.setItem("Grades", JSON.stringify(grade));
+          // grade.push({ [levels[grade.length]]: value });
+          grade.splice(levels.indexOf(level), 0, value);
+          await AsyncStorage.setItem(KEY, JSON.stringify(grade));
           return;
         }
       }
@@ -49,7 +51,7 @@ export const storeGrades = async (value) => {
 
 export const getGrades = async () => {
   try {
-    const jsonValue = await AsyncStorage.getItem("Grades");
+    const jsonValue = await AsyncStorage.getItem(KEY);
     console.log("Retrieved successfully");
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
@@ -65,4 +67,13 @@ export const clearGrades = async () => {
   }
 
   console.log("Done.");
+};
+
+export const deleteGrade = async (level) => {
+  try {
+    const value = await AsyncStorage.getItem(KEY);
+    // const retrievedGrade = await AsyncStorage.getItem(KEY);
+  } catch (e) {
+    // error reading value
+  }
 };
