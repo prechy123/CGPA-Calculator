@@ -43,6 +43,5 @@ export default function gradePoint(scores) {
 export function myCgpa(scores) {
   const allScore = scores.flatMap((score) => Object.values(score).flat());
   const cgpa = gradePoint(allScore);
-  console.log(cgpa);
   return cgpa;
 }

@@ -16,8 +16,9 @@ export default function DatabaseScreen() {
   const [cgpa, setCgpa] = useState("");
 
   const myGrade = async () => {
-    setGrades(await getGrades());
-    setCgpa(myCgpa(grades));
+    const myGrades = await getGrades();
+    setGrades(myGrades);
+    setCgpa(myCgpa(myGrades));
   };
   useEffect(() => {
     myGrade();

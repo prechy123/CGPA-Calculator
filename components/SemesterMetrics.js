@@ -1,6 +1,8 @@
 import React from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import gradePoint, { myPoints, totalUnits } from "../utils/gradeCalculator";
+import editIcon from "../assets/edit.png";
+import deleteIcon from "../assets/delete.png";
 
 export default function SemesterMetrics({grade}) {
   const level = Object.keys(grade)[0]
@@ -26,7 +28,8 @@ export default function SemesterMetrics({grade}) {
         </View>
       </View>
       <View style={styles.levelFunction}>
-        
+        <Image source={editIcon} style={{width: 20, height: 20}} />
+        <Image source={deleteIcon} style={{width: 20, height: 20}} />
       </View>
     </View>
   );
@@ -47,10 +50,10 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   levelFunction: {
-    width: 30,
-    height: 30,
-    backgroundColor: 'black',
     position: 'absolute',
-    right: 0,
+    top: 6,
+    right: 6,
+    flexDirection: 'row',
+    gap: 20,
   }
 });
