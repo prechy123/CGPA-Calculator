@@ -10,19 +10,27 @@ import {
 } from "react-native";
 import ScoreField from "../../components/ScoreField";
 import { DataTable } from "react-native-paper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SavedField from "../../components/SavedScore";
 import { v4 } from "uuid";
-import { clearGrades, storeGrades } from "../../utils/storage";
+import { getGrades } from "../../utils/storage";
 import gradePoint from "../../utils/gradeCalculator";
 
-export default function GradeInput({ navigation, route }) {
-  console.log(route.params?.scale);
+export default function EditScore({ navigation, route }) {
+  const level = route.params.level;
   const [scores, setScores] = useState([]);
   const [courseCode, setCourseCode] = useState("");
-  const [unit, setUnit] = useState("");
+  const [unit, setUnit] = useState("")
   const [grade, setGrade] = useState("");
 
+  const handleStoredScores = async () => {
+    const storedScores = await getGrades();
+    setScores(storedScores[0][level]);
+  };
+
+  useEffect(() => {
+    handleStoredScores();
+  }, []);
   function handleAddCourse() {
     if (courseCode && unit && grade) {
       setScores((prevScores) => [
@@ -37,11 +45,10 @@ export default function GradeInput({ navigation, route }) {
     }
   }
 
-  async function handleSaveSemesterGrade() {
+  async function handleUpdateSemesterGrade() {
     await storeGrades(scores);
     setScores([]);
     navigation.navigate("Database", { refresh: v4() });
-    // await clearGrades()
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -63,7 +70,7 @@ export default function GradeInput({ navigation, route }) {
             </DataTable.Title>
           </DataTable.Header>
           <ScrollView style={styles.fieldsWrapper}>
-            {scores.length !== 0 ? (
+            {scores && scores.length !== 0 ? (
               <>
                 {scores.map((score, index) => (
                   <SavedField
@@ -109,12 +116,11 @@ export default function GradeInput({ navigation, route }) {
       <View style={{ width: "100%", marginTop: 30 }}>
         <Button
           title="Save Semester grade"
-          onPress={handleSaveSemesterGrade}
+          onPress={handleUpdateSemesterGrade}
           color="#0B6623"
         />
       </View>
       <View style={styles.grade}>
-        {/* <Text style={styles.gradeText}>Total Units: {totalUnits()}</Text> */}
         <Text style={styles.gradeText}>Semester GP: {gradePoint(scores)}</Text>
       </View>
     </SafeAreaView>

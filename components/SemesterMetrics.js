@@ -4,19 +4,24 @@ import gradePoint, { myPoints, totalUnits } from "../utils/gradeCalculator";
 import editIcon from "../assets/edit.png";
 import deleteIcon from "../assets/delete.png";
 import { getGrades, updateGrades } from "../utils/storage";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SemesterMetrics({ grade, setGrades }) {
+  const navigation = useNavigation();
   const level = Object.keys(grade)[0];
   const gp = gradePoint(grade[level]);
   const myScore = myPoints(grade[level]);
   const unit = totalUnits(grade[level]);
 
   const handleEdit = () => {
+    navigation.navigate("Edit Score", { level });
     console.log("edit");
   };
   const handleDelete = async () => {
     const grades = await getGrades();
-    const filteredGrades = grades.filter((eachLevel) => Object.keys(eachLevel)[0] !== level);
+    const filteredGrades = grades.filter(
+      (eachLevel) => Object.keys(eachLevel)[0] !== level
+    );
     await updateGrades(filteredGrades);
     setGrades(filteredGrades);
   };

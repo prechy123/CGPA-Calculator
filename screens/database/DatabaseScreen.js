@@ -6,13 +6,18 @@ import {
   Text,
   View,
 } from "react-native";
-import SemesterMetrics from "../components/SemesterMetrics";
+import SemesterMetrics from "../../components/SemesterMetrics";
 import { useEffect, useState } from "react";
-import { clearGrades, getGrades } from "../utils/storage";
-import { myCgpa } from "../utils/gradeCalculator";
+import { clearGrades, getGrades } from "../../utils/storage";
+import { myCgpa } from "../../utils/gradeCalculator";
+import { v4 } from "uuid";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
-export default function DatabaseScreen({ navigation, route }) {
+export default function DatabaseScreen() {
+  const navigation = useNavigation();
+  const route = useRoute()
   const { refresh } = route.params || {};
+  console.log("refresh", refresh);
   const [grades, setGrades] = useState([]);
   const [cgpa, setCgpa] = useState("");
 
@@ -36,25 +41,31 @@ export default function DatabaseScreen({ navigation, route }) {
   }, [refresh]);
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.heading}>Total CGPA is: {cgpa}</Text>
+      {grades && grades.length > 0 && (
+        <>
+          <Text style={styles.heading}>Total CGPA is: {cgpa}</Text>
+          <View style={{ marginHorizontal: 15 }}>
+            <Button
+              title="Clear Database"
+              onPress={handleClearDB}
+              color="#0B6623"
+            />
+          </View>
+        </>
+      )}
 
       <ScrollView>
         {grades && grades.length > 0 ? (
-          ((
-            <View style={{ marginHorizontal: 15 }}>
-              <Button
-                title="Clear Database"
-                onPress={handleClearDB}
-                color="#0B6623"
-              />
-            </View>
-          ),
-          grades.map((grade, index) => (
-            <SemesterMetrics key={index} grade={grade} setGrades={setGrades} />
-          )))
+          grades.map((grade) => (
+            <SemesterMetrics key={v4()} grade={grade} setGrades={setGrades} />
+          ))
         ) : (
-          <View style={{ marginHorizontal: 15 }}>
-            <Text>No Grade stored</Text>
+          <View style={{ marginHorizontal: 15, marginTop: 70 }}>
+            <Text
+              style={{ fontSize: 32, textAlign: "center", marginBottom: 20 }}
+            >
+              No Grade stored
+            </Text>
             <View>
               <Button
                 title="Go to Home Page"
