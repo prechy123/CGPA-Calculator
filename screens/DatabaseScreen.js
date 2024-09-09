@@ -8,31 +8,61 @@ import {
 } from "react-native";
 import SemesterMetrics from "../components/SemesterMetrics";
 import { useEffect, useState } from "react";
-import { getGrades } from "../utils/storage";
+import { clearGrades, getGrades } from "../utils/storage";
 import { myCgpa } from "../utils/gradeCalculator";
 
-export default function DatabaseScreen() {
+export default function DatabaseScreen({ navigation, route }) {
+  const { refresh } = route.params || {};
   const [grades, setGrades] = useState([]);
   const [cgpa, setCgpa] = useState("");
 
+  const handleClearDB = async () => {
+    await clearGrades();
+    setGrades([]);
+  };
+
+  const handleNavigateToHomePage = () => {
+    navigation.navigate("Home");
+  };
+
   const myGrade = async () => {
     const myGrades = await getGrades();
+    console.log("myGrades", myGrades);
     setGrades(myGrades);
     setCgpa(myCgpa(myGrades));
   };
   useEffect(() => {
     myGrade();
-  }, []);
+  }, [refresh]);
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.heading}>Total CGPA is: {cgpa}</Text>
+
       <ScrollView>
-        {grades.length > 0 ? (
+        {grades && grades.length > 0 ? (
+          ((
+            <View style={{ marginHorizontal: 15 }}>
+              <Button
+                title="Clear Database"
+                onPress={handleClearDB}
+                color="#0B6623"
+              />
+            </View>
+          ),
           grades.map((grade, index) => (
-            <SemesterMetrics key={index} grade={grade} />
-          ))
+            <SemesterMetrics key={index} grade={grade} setGrades={setGrades} />
+          )))
         ) : (
-          <Text>No Grade stored</Text>
+          <View style={{ marginHorizontal: 15 }}>
+            <Text>No Grade stored</Text>
+            <View>
+              <Button
+                title="Go to Home Page"
+                onPress={handleNavigateToHomePage}
+                color="#0B6623"
+              />
+            </View>
+          </View>
         )}
       </ScrollView>
     </SafeAreaView>

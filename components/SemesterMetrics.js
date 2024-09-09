@@ -3,8 +3,9 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import gradePoint, { myPoints, totalUnits } from "../utils/gradeCalculator";
 import editIcon from "../assets/edit.png";
 import deleteIcon from "../assets/delete.png";
+import { getGrades, updateGrades } from "../utils/storage";
 
-export default function SemesterMetrics({ grade }) {
+export default function SemesterMetrics({ grade, setGrades }) {
   const level = Object.keys(grade)[0];
   const gp = gradePoint(grade[level]);
   const myScore = myPoints(grade[level]);
@@ -13,8 +14,11 @@ export default function SemesterMetrics({ grade }) {
   const handleEdit = () => {
     console.log("edit");
   };
-  const handleDelete = () => {
-    console.log("delete");
+  const handleDelete = async () => {
+    const grades = await getGrades();
+    const filteredGrades = grades.filter((eachLevel) => Object.keys(eachLevel)[0] !== level);
+    await updateGrades(filteredGrades);
+    setGrades(filteredGrades);
   };
 
   return (

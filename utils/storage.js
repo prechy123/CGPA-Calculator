@@ -22,28 +22,38 @@ const levels = [
   "LEGEND🐐🐐",
 ];
 
-const KEY = "Grades"
+const KEY = "Grades";
 
 export const storeGrades = async (value) => {
   try {
     const retrievedGrade = await AsyncStorage.getItem(KEY);
     const grade = retrievedGrade != null ? JSON.parse(retrievedGrade) : null;
+    
     if (grade === null) {
       const jsonGrade = JSON.stringify([{ "1001st": value }]);
       await AsyncStorage.setItem(KEY, jsonGrade);
-    } else {
-      for (level of levels) {
-        const prevLevel = Object.keys(grade[grade.length - 1])[0];
-        if (level === prevLevel) {
-          // grade.push({ [levels[grade.length]]: value });
-          grade.splice(levels.indexOf(level), 0, value);
-          await AsyncStorage.setItem(KEY, JSON.stringify(grade));
-          return;
-        }
-      }
+      return;
     }
 
-    console.log("Stored successfully");
+    let prevLevel = levels[0];
+    for (let i = 0; i < grade.length; i++) {
+      const levelSem = Object.keys(grade[i])[0];
+      const correctLevelOrder = levels[i];
+
+      if (levelSem !== correctLevelOrder) {
+        prevLevel = levels[i - 1] || levels[0];
+        break;
+      }
+      prevLevel = correctLevelOrder;
+    }
+
+    const nextLevelIndex = levels.indexOf(prevLevel) + 1;
+    if (nextLevelIndex < levels.length) {
+      grade.splice(nextLevelIndex, 0, { [levels[nextLevelIndex]]: value });
+      console.log("Grade updated successfully.");
+      await AsyncStorage.setItem(KEY, JSON.stringify(grade));
+      return;
+    }
   } catch (e) {
     // saving error
   }
@@ -59,6 +69,16 @@ export const getGrades = async () => {
   }
 };
 
+export const updateGrades = async (grades) => {
+  try {
+    await AsyncStorage.clear();
+    await AsyncStorage.setItem(KEY, JSON.stringify(grades));
+    console.log("Updated successfully");
+  } catch (e) {
+    // saving error
+  }
+};
+
 export const clearGrades = async () => {
   try {
     await AsyncStorage.clear();
@@ -67,13 +87,4 @@ export const clearGrades = async () => {
   }
 
   console.log("Done.");
-};
-
-export const deleteGrade = async (level) => {
-  try {
-    const value = await AsyncStorage.getItem(KEY);
-    // const retrievedGrade = await AsyncStorage.getItem(KEY);
-  } catch (e) {
-    // error reading value
-  }
 };

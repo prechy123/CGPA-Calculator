@@ -13,7 +13,7 @@ import { DataTable } from "react-native-paper";
 import { useState } from "react";
 import SavedField from "../../components/SavedScore";
 import { v4 } from "uuid";
-import { clearGrades, getGrades, storeGrades } from "../../utils/storage";
+import { storeGrades } from "../../utils/storage";
 import gradePoint from "../../utils/gradeCalculator";
 
 export default function GradeInput({ navigation, route }) {
@@ -38,9 +38,9 @@ export default function GradeInput({ navigation, route }) {
   }
 
   async function handleSaveSemesterGrade() {
-    await storeGrades(scores)
-    setScores([])
-    navigation.navigate("Database");
+    await storeGrades(scores);
+    setScores([]);
+    navigation.navigate("Database", {refresh: v4()});
   }
   return (
     <SafeAreaView style={styles.container}>
