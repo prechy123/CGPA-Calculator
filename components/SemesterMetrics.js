@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import gradePoint, { myPoints, totalUnits } from "../utils/gradeCalculator";
 import editIcon from "../assets/edit.png";
 import deleteIcon from "../assets/delete.png";
-import { getGrades, updateGrades } from "../utils/storage";
+import { getGrades, levels, updateGrades } from "../utils/storage";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SemesterMetrics({ grade, setGrades }) {
@@ -14,9 +14,11 @@ export default function SemesterMetrics({ grade, setGrades }) {
   const unit = totalUnits(grade[level]);
 
   const handleEdit = () => {
-    navigation.navigate("Edit Score", { level });
-    console.log("edit");
+    navigation.navigate("Edit Score", {
+      level,
+    });
   };
+
   const handleDelete = async () => {
     const grades = await getGrades();
     const filteredGrades = grades.filter(

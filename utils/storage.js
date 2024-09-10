@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const levels = [
+export const levels = [
   "1001st",
   "1002nd",
   "2001st",

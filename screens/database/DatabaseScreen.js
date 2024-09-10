@@ -12,13 +12,13 @@ import { clearGrades, getGrades } from "../../utils/storage";
 import { myCgpa } from "../../utils/gradeCalculator";
 import { v4 } from "uuid";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useGrades } from "../../context/GradesContext";
 
 export default function DatabaseScreen() {
   const navigation = useNavigation();
   const route = useRoute()
   const { refresh } = route.params || {};
-  console.log("refresh", refresh);
-  const [grades, setGrades] = useState([]);
+  const {grades, setGrades} = useGrades()
   const [cgpa, setCgpa] = useState("");
 
   const handleClearDB = async () => {
@@ -32,7 +32,6 @@ export default function DatabaseScreen() {
 
   const myGrade = async () => {
     const myGrades = await getGrades();
-    console.log("myGrades", myGrades);
     setGrades(myGrades);
     setCgpa(myCgpa(myGrades));
   };

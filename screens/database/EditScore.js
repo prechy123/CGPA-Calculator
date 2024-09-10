@@ -13,24 +13,26 @@ import { DataTable } from "react-native-paper";
 import { useEffect, useState } from "react";
 import SavedField from "../../components/SavedScore";
 import { v4 } from "uuid";
-import { getGrades } from "../../utils/storage";
+import { getGrades, levels, updateGrades } from "../../utils/storage";
 import gradePoint from "../../utils/gradeCalculator";
+import { useGrades } from "../../context/GradesContext";
 
-export default function EditScore({ navigation, route }) {
+export default function EditScore({ route, navigation }) {
   const level = route.params.level;
+  const { grades, setGrades } = useGrades();
   const [scores, setScores] = useState([]);
   const [courseCode, setCourseCode] = useState("");
-  const [unit, setUnit] = useState("")
+  const [unit, setUnit] = useState("");
   const [grade, setGrade] = useState("");
 
-  const handleStoredScores = async () => {
-    const storedScores = await getGrades();
-    setScores(storedScores[0][level]);
-  };
-
   useEffect(() => {
+    const handleStoredScores = async () => {
+      const storedScores = await getGrades();
+      setScores(storedScores[levels.indexOf(level)][level]);
+    };
     handleStoredScores();
   }, []);
+
   function handleAddCourse() {
     if (courseCode && unit && grade) {
       setScores((prevScores) => [
@@ -46,8 +48,12 @@ export default function EditScore({ navigation, route }) {
   }
 
   async function handleUpdateSemesterGrade() {
-    await storeGrades(scores);
-    setScores([]);
+    setGrades((prev) => {
+      const updatedArray = [...prev];
+      updatedArray[levels.indexOf(level)][level] = scores;
+      return updatedArray;
+    });
+    await updateGrades(grades);
     navigation.navigate("Database", { refresh: v4() });
   }
   return (

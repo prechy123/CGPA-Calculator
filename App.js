@@ -10,6 +10,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 // import SaveGrade from "./screens/home/SaveGrade";
 import GradeInput from "./screens/home/GradeInput";
 import EditScore from "./screens/database/EditScore";
+import { GradesProvider } from "./context/GradesContext";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -56,58 +57,60 @@ function DatabaseStack() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: "#f5f5f5",
-          tabBarActiveBackgroundColor: "#0B6623",
-          tabBarInactiveTintColor: "#dddddd",
-          tabBarInactiveBackgroundColor: "#728C69",
-          tabBarLabelStyle: {
-            fontSize: 16,
-            fontWeight: "bold",
-          },
-          headerStyle: {
-            backgroundColor: "#0B6623",
-          },
-          headerTitleStyle: {
-            color: "#f5f5f5",
-            fontWeight: "bold",
-          },
-        }}
-      >
-        <Tab.Screen
-          name="HomeWrapper"
-          component={HomeStack}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <AntDesign name="home" size={20} color={color} />
-            ),
-            headerShown: false,
-            tabBarLabel: "Home",
+    <GradesProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={{
+            tabBarActiveTintColor: "#f5f5f5",
+            tabBarActiveBackgroundColor: "#0B6623",
+            tabBarInactiveTintColor: "#dddddd",
+            tabBarInactiveBackgroundColor: "#728C69",
+            tabBarLabelStyle: {
+              fontSize: 16,
+              fontWeight: "bold",
+            },
+            headerStyle: {
+              backgroundColor: "#0B6623",
+            },
+            headerTitleStyle: {
+              color: "#f5f5f5",
+              fontWeight: "bold",
+            },
           }}
-        />
-        <Tab.Screen
-          name="DatabaseWrapper"
-          component={DatabaseStack}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <AntDesign name="database" size={20} color={color} />
-            ),
-            headerShown: false,
-            tabBarLabel: "Databases",
-          }}
-        />
-        <Tab.Screen
-          name="About"
-          component={AboutScreen}
-          options={{
-            tabBarIcon: ({ color }) => (
-              <AntDesign name="infocirlce" size={20} color={color} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+        >
+          <Tab.Screen
+            name="HomeWrapper"
+            component={HomeStack}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <AntDesign name="home" size={20} color={color} />
+              ),
+              headerShown: false,
+              tabBarLabel: "Home",
+            }}
+          />
+          <Tab.Screen
+            name="DatabaseWrapper"
+            component={DatabaseStack}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <AntDesign name="database" size={20} color={color} />
+              ),
+              headerShown: false,
+              tabBarLabel: "Databases",
+            }}
+          />
+          <Tab.Screen
+            name="About"
+            component={AboutScreen}
+            options={{
+              tabBarIcon: ({ color }) => (
+                <AntDesign name="infocirlce" size={20} color={color} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </GradesProvider>
   );
 }

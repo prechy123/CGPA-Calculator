@@ -17,7 +17,7 @@ import { clearGrades, storeGrades } from "../../utils/storage";
 import gradePoint from "../../utils/gradeCalculator";
 
 export default function GradeInput({ navigation, route }) {
-  console.log(route.params?.scale);
+  const gradeScale = route.params?.scale;
   const [scores, setScores] = useState([]);
   const [courseCode, setCourseCode] = useState("");
   const [unit, setUnit] = useState("");
@@ -42,6 +42,16 @@ export default function GradeInput({ navigation, route }) {
     setScores([]);
     navigation.navigate("Database", { refresh: v4() });
     // await clearGrades()
+  }
+  if (gradeScale === 4) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <Text style={{fontSize: 18, textAlign: 'center', marginBottom: 10}}>
+          Currently under construction, only grade scale 5.0 available 
+        </Text>
+        <Button color="#0B6623" title="Go back" onPress={() => navigation.goBack()} />
+      </SafeAreaView>
+    )
   }
   return (
     <SafeAreaView style={styles.container}>
